@@ -17,13 +17,13 @@ int main(int argc, char **argv){
     int level[3] = {0, 0, 0};
     int prev_arg = -1;
     string temp_arg;
-    cout << argc << endl;
+    //cout << argc << endl;
 
     // reads the command line and makes sure all inputs are valid, optional and mandatory
     for(int i = 1; i < argc; i++){
         
         temp_arg = argv[i];
-        cout << temp_arg << endl;
+        //cout << temp_arg << endl;
         
         //mandatory argument conditions
         if(checkForTracer(temp_arg)){
