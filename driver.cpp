@@ -7,20 +7,21 @@ using namespace std;
 extern bool checkForTracer(string);
 extern bool isNumber(string);
 extern int outputCheck(string);
+extern bool isNegative(string);
 
 int main(int argc, char **argv){
     //variables used throughout the program
     int n = -1;
     int c = -1;
     int o = -1;
+    int level[3] = {0, 0, 0};
+
     int marker = -1;
     int totBits = 0;
     int num;
     int lvlNum;
-    int level[3] = {0, 0, 0};
     int prev_arg = -1;
     string temp_arg;
-    //cout << argc << endl;
 
     // reads the command line and makes sure all inputs are valid, optional and mandatory
     for(int i = 1; i < argc; i++){
@@ -47,23 +48,29 @@ int main(int argc, char **argv){
                 cout << "Level " << lvlNum << " page table must be at least 1 bit" << endl;
                 return 0;
             }
+            level[lvlNum] = num;
             totBits += num;
+            if(lvlNum == 2) marker = -1;
         }
 
         //optional argument conditions
-        else if(temp_arg.compare("-n")) prev_arg = 1;
-        else if(temp_arg.compare("-c")){
+        else if(temp_arg.compare("-n") == 0) prev_arg = 1;
+        else if(temp_arg.compare("-c") == 0){
             prev_arg = 2;
             c = 0;
         }
-        else if(temp_arg.compare("-o")){
+        else if(temp_arg.compare("-o") == 0){
             prev_arg = 3;
             o = 6;
         }
-        else if(isNumber(temp_arg)){
-            if(prev_arg == 1)       n = stoi(temp_arg);
+        else if(isNumber(temp_arg) || isNumber(temp_arg.substr(1))){
+
+            if(isNegative(temp_arg))    num = -stoi(temp_arg.substr(1));
+            else                        num = stoi(temp_arg);
+
+            if(prev_arg == 1)       n = num;
             else if(prev_arg == 2){
-                c = stoi(temp_arg);
+                c = num;
                 if(c < 0){
                     cout << "Cache capacity must be a number, greater than or equal to 0" << endl;
                     return 0;
@@ -81,6 +88,7 @@ int main(int argc, char **argv){
         return 0;
     }
 
+    cout << c << endl;
     return 0;
 }
 
@@ -119,4 +127,12 @@ int outputCheck(string s){
     else if(s.compare("offset") == 0)           return 5;
     else if(s.compare("summary") == 0)          return 6;
     else                                        return 0;
+}
+
+/*
+input: check for string to be negative, expected to be a number
+output: yes if the first char is -, otherwise false
+*/
+bool isNegative(string s){
+    return s[0] == '-';
 }
