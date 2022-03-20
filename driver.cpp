@@ -5,11 +5,14 @@ using namespace std;
 
 //helper functions
 extern bool checkForTracer(string);
+extern bool isNumber(string);
+extern int outputCheck(string);
 
 int main(int argc, char **argv){
     //variables used throughout the program
     int n = -1;
     int c = -1;
+    int o = -1;
     int marker = -1;
     int totBits = 0;
     int num;
@@ -32,6 +35,7 @@ int main(int argc, char **argv){
                 cout << "Unable to open <<" + temp_arg << ">>" << endl;
                 return 0;
             }
+            //all arguments following the .tr file are used to specify the page levels and their bit size
             marker = i;
         }
         else if(marker != -1){
@@ -45,19 +49,37 @@ int main(int argc, char **argv){
             }
             totBits += num;
         }
-        //optional argument conditions
 
-        //recognize the argument types
+        //optional argument conditions
         else if(temp_arg.compare("-n")) prev_arg = 1;
-        else if(temp_arg.compare("-c")) prev_arg = 2;
-        else if(temp_arg.compare("-o")) prev_arg = 3;
-        else                            prev_arg = -1;
+        else if(temp_arg.compare("-c")){
+            prev_arg = 2;
+            c = 0;
+        }
+        else if(temp_arg.compare("-o")){
+            prev_arg = 3;
+            o = 6;
+        }
+        else if(isNumber(temp_arg)){
+            if(prev_arg == 1)       n = stoi(temp_arg);
+            else if(prev_arg == 2){
+                c = stoi(temp_arg);
+                if(c < 0){
+                    cout << "Cache capacity must be a number, greater than or equal to 0" << endl;
+                    return 0;
+                }
+            }
+            prev_arg = -1;
+        }
+        else if(outputCheck(temp_arg) > 0){
+            o = outputCheck(temp_arg);
+            prev_arg = -1;
+        }
     }
     if(totBits > 28){
         cout << "Too many bits used in page tables" << endl;
         return 0;
     }
-
 
     return 0;
 }
@@ -73,4 +95,28 @@ bool checkForTracer(string input){
         }
     }
     return false;
+}
+
+/*
+Input: takes in a string input to scan each char for being a number
+Output: True if the entire string is a number, false otherwise
+*/
+bool isNumber(string s){
+    string::const_iterator it = s.begin();
+    while(it != s.end() && isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}
+
+/*
+Input: takes in a string, which is expected to be from the command line
+Output: returns an int from 1-6 if valid string, otherwise returns 0
+*/
+int outputCheck(string s){
+    if(s.compare("bitmasks") == 0)              return 1;
+    else if(s.compare("virtual2physical") == 0) return 2;
+    else if(s.compare("v2p_tlb_pt") == 0)       return 3;
+    else if(s.compare("vpn2pfn") == 0)          return 4;
+    else if(s.compare("offset") == 0)           return 5;
+    else if(s.compare("summary") == 0)          return 6;
+    else                                        return 0;
 }
