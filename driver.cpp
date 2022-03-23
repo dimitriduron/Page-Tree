@@ -3,6 +3,10 @@
 #include <string>
 using namespace std;
 
+//included header files
+#include "tracereader.h"
+#include "output_mode_helpers.h"
+
 //helper functions
 extern bool checkForTracer(string);
 extern bool isNumber(string);
@@ -50,6 +54,7 @@ int main(int argc, char **argv){
             }
             level[lvlNum] = num;
             totBits += num;
+            // we wont expect anymore levels after 3
             if(lvlNum == 2) marker = -1;
         }
 
