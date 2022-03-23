@@ -102,22 +102,21 @@ int main(int argc, char **argv){
     struct PageTable pgtable;
 
     pgtable.levelCount = lvlNum+1;
-    int shiftAmount = 0;
+    //31 represents the 32nd bit of the hex values/addresses
+    int temp_num = 31;
     
-    for(int i = lvlNum; i >= 0; i--){
-        cout << level[i] << endl;
-
+    // fills in data for PageTable struct
+    for(int i = 0; i <= lvlNum; i++){
+        
         pgtable.entrycountArr[i] = pow(2, level[i]);
-        cout << pow(2, level[i]) << endl;
+        pgtable.shiftArr[i] = temp_num-level[i]+1;
+        pgtable.bitmaskArr[i] = getMask(temp_num, pgtable.shiftArr[i]);
 
-        shiftAmount += level[i];
-        pgtable.shiftArr[i] = shiftAmount;
-        cout << shiftAmount << endl;
-
-        cout << endl;
+        temp_num -= level[i];
     }
+    
 
-    //cout << hex << getMask(27, 22) << endl;
+    
     
     return 0;
 }
