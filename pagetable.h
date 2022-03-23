@@ -24,3 +24,4 @@ typedef struct Level{
 };
 
 unsigned int virtualAddressToPageNum(unsigned int, unsigned int, unsigned int);
+unsigned int getMask(unsigned int, unsigned int);

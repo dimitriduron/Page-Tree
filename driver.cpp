@@ -93,7 +93,7 @@ int main(int argc, char **argv){
         return 0;
     }
 
-    cout << hex << virtualAddressToPageNum(0x3C654321, 0x0FC00000, 22) << endl;
+    cout << hex << getMask(27, 22) << endl;
     
     return 0;
 }
