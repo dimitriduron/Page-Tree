@@ -18,7 +18,7 @@ int main(int argc, char **argv){
     //variables used throughout the program
     int n = -1;
     int c = -1;
-    int o = -1;
+    int o = 0;
     unordered_map<int, int> level;
 
     int marker = -1;
@@ -27,7 +27,9 @@ int main(int argc, char **argv){
     int lvlNum;
     int prev_arg = -1;
     string temp_arg;
+    int filename_index;
 
+    //******COMMAND LINE READING******//
     // reads the command line and makes sure all inputs are valid, optional and mandatory
     for(int i = 1; i < argc; i++){
         
@@ -35,11 +37,13 @@ int main(int argc, char **argv){
         
         //mandatory argument conditions
         if(checkForTracer(temp_arg)){
-            ifstream f(temp_arg);
-            if(!f.good()){
+            ifstream trace_file(temp_arg);
+            if(!trace_file.good()){
                 cout << "Unable to open <<" + temp_arg << ">>" << endl;
                 return 0;
             }
+            filename_index = i;
+            trace_file.close();
             //all arguments following the .tr file are used to specify the page levels and their bit size
             marker = i;
         }
@@ -98,6 +102,8 @@ int main(int argc, char **argv){
         return 0;
     }
 
+
+    //*******MAIN LOGIC*********//
     //initialize the pagetable struct
     struct PageTable pgtable;
 
@@ -115,8 +121,29 @@ int main(int argc, char **argv){
         temp_num -= level[i];
     }
     
+    // read in trace file
+    p2AddrTr mtrace;
+    unsigned int vAddr;
+
+    FILE *tr;
+    tr = fopen(argv[filename_index], "r");
+
+    /*
+    if(NextAddress(tr, &mtrace)){
+        vAddr = mtrace.addr;
+        cout << vAddr << endl;
+    }
+    */
+
+
+    //***FINAL OUTPUT SECTION***//
+    //basic summary output, command line default output
+    if(o == 0){
+        //pagesize, cachehits, pagetablehits, addresses, frames_used, bytes
+        report_summary(1, 1, 1, 1, 1, 1);
+    }
     //bitmask situation
-    if(o == 1){
+    else if(o == 1){
         report_bitmasks(pgtable.levelCount, pgtable.bitmaskArr);
     }
     
@@ -159,8 +186,8 @@ int outputCheck(string s){
     else if(s.compare("v2p_tlb_pt") == 0)       return 3;
     else if(s.compare("vpn2pfn") == 0)          return 4;
     else if(s.compare("offset") == 0)           return 5;
-    else if(s.compare("summary") == 0)          return 6;
-    else                                        return -1;
+    else if(s.compare("summary") == 0)          return 0;
+    return 0;
 }
 
 /*

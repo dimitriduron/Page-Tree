@@ -17,7 +17,7 @@ pagingwithtlb : driver.o tracereader.o output_mode_helpers.o pagetable.o
 
 
 driver.o:				driver.cpp
-tracereader.o:			tracereader.h tracereader.c
+tracereader.o:			tracereader.h tracereader.cpp
 output_mode_helpers.o:	output_mode_helpers.h output_mode_helpers.cpp
 pagetable.o:			pagetable.h pagetable.cpp
 
