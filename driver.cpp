@@ -19,7 +19,7 @@ int main(int argc, char **argv){
     int n = -1;
     int c = -1;
     int o = -1;
-    int level[10];
+    unordered_map<int, int> level;
 
     int marker = -1;
     int totBits = 0;
@@ -54,13 +54,18 @@ int main(int argc, char **argv){
             }
             level[lvlNum] = num;
             totBits += num;
-            // we wont expect anymore levels after 3
-            if(lvlNum == 2) marker = -1;
+            
+            //check for the next argv still being a number or within argc range
+            if(argc > i+1){
+                temp_arg = argv[i+1];
+                if(!isNumber(temp_arg)) marker = -1;
+            }
         }
 
         //optional argument conditions
         else if(temp_arg.compare("-n") == 0) prev_arg = 1;
         else if(temp_arg.compare("-c") == 0){
+            
             prev_arg = 2;
             c = 0;
         }
@@ -93,7 +98,12 @@ int main(int argc, char **argv){
         return 0;
     }
 
-    cout << hex << getMask(27, 22) << endl;
+    //initialize the pagetable struct
+    struct PageTable *pgtable;
+
+    
+
+    //cout << hex << getMask(27, 22) << endl;
     
     return 0;
 }
