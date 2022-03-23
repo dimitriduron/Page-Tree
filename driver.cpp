@@ -131,7 +131,7 @@ int main(int argc, char **argv){
     while(!feof(testFile)){
         if(NextAddress(testFile, &mtrace)){
             vAddr = mtrace.addr;
-            cout << hex << vAddr << endl;
+            //cout << hex << vAddr << endl;
         }
     }
 
