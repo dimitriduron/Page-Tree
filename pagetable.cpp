@@ -33,5 +33,9 @@ unsigned int getMask(unsigned int left, unsigned int right){
 }
 
 void insertPage(PageTable *table, unsigned int virtualAddress, unsigned int frame){
+    for(int currentLevel = 0; currentLevel < table->levelCount; currentLevel++){
 
+        
+
+    }
 }

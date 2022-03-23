@@ -125,15 +125,15 @@ int main(int argc, char **argv){
     p2AddrTr mtrace;
     unsigned int vAddr;
 
-    FILE *tr;
-    tr = fopen(argv[filename_index], "r");
+    FILE *testFile;
+    testFile = fopen(argv[filename_index], "r");
 
-    /*
-    if(NextAddress(tr, &mtrace)){
-        vAddr = mtrace.addr;
-        cout << vAddr << endl;
+    while(!feof(testFile)){
+        if(NextAddress(testFile, &mtrace)){
+            vAddr = mtrace.addr;
+            cout << hex << vAddr << endl;
+        }
     }
-    */
 
 
     //***FINAL OUTPUT SECTION***//
