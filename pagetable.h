@@ -1,3 +1,7 @@
+#include <iostream>
+#include <stdio.h>
+using namespace std;
+
 /*
 PageTable
     
@@ -16,5 +20,7 @@ typedef struct PageTable{
 typedef struct Level{
     int *depth;
     PageTable *pgtable;
-
+    Level *nextLevel;
 };
+
+unsigned int virtualAddressToPageNum(unsigned int, unsigned int, unsigned int);

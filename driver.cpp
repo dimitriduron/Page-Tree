@@ -6,6 +6,7 @@ using namespace std;
 //included header files
 #include "tracereader.h"
 #include "output_mode_helpers.h"
+#include "pagetable.h"
 
 //helper functions
 extern bool checkForTracer(string);
@@ -18,7 +19,7 @@ int main(int argc, char **argv){
     int n = -1;
     int c = -1;
     int o = -1;
-    int level[3] = {0, 0, 0};
+    int level[10];
 
     int marker = -1;
     int totBits = 0;
@@ -31,7 +32,6 @@ int main(int argc, char **argv){
     for(int i = 1; i < argc; i++){
         
         temp_arg = argv[i];
-        //cout << temp_arg << endl;
         
         //mandatory argument conditions
         if(checkForTracer(temp_arg)){
@@ -93,9 +93,12 @@ int main(int argc, char **argv){
         return 0;
     }
 
+    cout << hex << virtualAddressToPageNum(0x3C654321, 0x0FC00000, 22) << endl;
     
     return 0;
 }
+
+
 
 /*
 Input: Takes in a string, expected to be from the command line
