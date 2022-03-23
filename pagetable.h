@@ -20,7 +20,7 @@ typedef struct PageTable{
 };
 
 typedef struct Level{
-    int *depth;
+    int depth;
     PageTable *pgtable;
     unordered_map<unsigned int, Level> *nextLevel;
 };

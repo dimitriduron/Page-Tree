@@ -99,9 +99,23 @@ int main(int argc, char **argv){
     }
 
     //initialize the pagetable struct
-    struct PageTable *pgtable;
+    struct PageTable pgtable;
 
+    pgtable.levelCount = lvlNum+1;
+    int shiftAmount = 0;
     
+    for(int i = lvlNum; i >= 0; i--){
+        cout << level[i] << endl;
+
+        pgtable.entrycountArr[i] = pow(2, level[i]);
+        cout << pow(2, level[i]) << endl;
+
+        shiftAmount += level[i];
+        pgtable.shiftArr[i] = shiftAmount;
+        cout << shiftAmount << endl;
+
+        cout << endl;
+    }
 
     //cout << hex << getMask(27, 22) << endl;
     
