@@ -33,9 +33,14 @@ unsigned int getMask(unsigned int left, unsigned int right){
 }
 
 void insertPage(PageTable *table, unsigned int virtualAddress, unsigned int frame){
+    unsigned int mask;
     for(int currentLevel = 0; currentLevel < table->levelCount; currentLevel++){
-
+        mask = table->bitmaskArr[currentLevel];
         
 
     }
+}
+
+void insertAddress(PageTable *table, unsigned int virtualAddress, unsigned int frame){
+
 }
