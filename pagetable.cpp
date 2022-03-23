@@ -31,3 +31,4 @@ unsigned int getMask(unsigned int left, unsigned int right){
     mask = mask << right-1;
     return mask;
 }
+

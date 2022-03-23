@@ -19,6 +19,7 @@
 #ifdef __cplusplus
 /* C++ includes */
 #include <stdint.h>
+#include <unordered_map>
 #else
 /* C includes */
 #include <inttypes.h>

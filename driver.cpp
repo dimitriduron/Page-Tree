@@ -115,7 +115,10 @@ int main(int argc, char **argv){
         temp_num -= level[i];
     }
     
-
+    //bitmask situation
+    if(o == 1){
+        report_bitmasks(pgtable.levelCount, pgtable.bitmaskArr);
+    }
     
     
     return 0;
@@ -157,7 +160,7 @@ int outputCheck(string s){
     else if(s.compare("vpn2pfn") == 0)          return 4;
     else if(s.compare("offset") == 0)           return 5;
     else if(s.compare("summary") == 0)          return 6;
-    else                                        return 0;
+    else                                        return -1;
 }
 
 /*

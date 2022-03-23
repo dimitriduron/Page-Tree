@@ -101,7 +101,7 @@ void report_summary(unsigned int page_size,
  * levels - Number of levels
  * masks - Pointer to array of bitmasks
  */
-void report_bitmasks(int levels, uint32_t *masks) {
+void report_bitmasks(int levels, unordered_map<int, unsigned int> masks) {
   printf("Bitmasks\n");
   for (int idx = 0; idx < levels; idx++) 
     /* show mask entry and move to next */

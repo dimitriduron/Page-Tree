@@ -21,7 +21,7 @@ typedef struct PageTable{
     unordered_map<int, unsigned int> bitmaskArr;
     unordered_map<int, int> shiftArr;
     unordered_map<int, unsigned int> entrycountArr;
-    struct Level *baselvl;
+    struct Level *rootLevelPtr;
 };
 
 typedef struct Level{
@@ -32,3 +32,4 @@ typedef struct Level{
 
 unsigned int virtualAddressToPageNum(unsigned int, unsigned int, unsigned int);
 unsigned int getMask(unsigned int, unsigned int);
+void report_bitmasks(int, unordered_map<int, unsigned int>);
