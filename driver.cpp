@@ -137,18 +137,24 @@ int main(int argc, char **argv){
     unsigned int addressCount = 0;
     unsigned int cacheHits = 0;
     unsigned int pageHits = 0;
-    unsigned int frameCount = 0;
+    unsigned int frameNum;
+    unsigned int offset;
+    unsigned int frameAddr;
 
     //***PROCESS ADDRESSES***//
     while(!feof(testFile)){
         if(NextAddress(testFile, &mtrace)){
             vAddr = mtrace.addr;
             addressCount++;
-            pageHits += insertAddress(pgtable, vAddr);
+            frameNum = insertAddress(pgtable, vAddr);
             
             // when -o is set to offset, we need to print the offset of each 
             if(o == 5){
                 hexnum(getOffset(totBits, vAddr));
+            }
+            else if(o == 2){
+                frameAddr = getFrameAddr(totBits, vAddr, pgtable->frameNum);
+                report_virtual2physical(vAddr, frameAddr);
             }
         }
     }

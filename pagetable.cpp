@@ -68,9 +68,11 @@ int insertAddress(PageTable *table, unsigned int virtualAddress){
     if(currentLevel->frameMap.find(pageNum) == currentLevel->frameMap.end()){
         currentLevel->frameMap[pageNum] = table->frameNum;
         table->frameNum++;
-        return 0;
     }
-    return 1;
+    else{
+        table->pageHits++;
+    }
+    return currentLevel->frameMap[pageNum];
 }
 
 unsigned int getOffset(unsigned int pageBits, unsigned int virtualAddress){
@@ -78,4 +80,14 @@ unsigned int getOffset(unsigned int pageBits, unsigned int virtualAddress){
     unsigned int offset;
     offset = virtualAddress & mask;
     return offset;
+}
+
+unsigned int getFrameAddr(unsigned int pageBits, unsigned int virtualAddress, unsigned int frame){
+    unsigned int frameAddr;
+
+    frameAddr = frame;
+    frameAddr = frameAddr << 32-pageBits;
+    frameAddr = frameAddr | getOffset(pageBits, virtualAddress);
+
+    return frameAddr;
 }
