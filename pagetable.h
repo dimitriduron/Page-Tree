@@ -33,6 +33,7 @@ typedef struct Level{
 
 unsigned int virtualAddressToPageNum(unsigned int, unsigned int, unsigned int);
 unsigned int getMask(unsigned int, unsigned int);
+unsigned int getOffset(unsigned int, unsigned int);
 void report_bitmasks(int, unordered_map<int, unsigned int>);
 void createPage(Level*, unsigned int);
 int insertAddress(PageTable*, unsigned int);

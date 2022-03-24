@@ -21,13 +21,15 @@ Description:    To get the mask, we will want to make sure the amount of bits be
         to compensate for this inclusive portion by subtracting 1 from the shift.
 */
 unsigned int getMask(unsigned int left, unsigned int right){
-    unsigned int mask = 0x0;
+    unsigned int mask = 0;
     unsigned int bitAmount = left-right+1;
 
     for(int i = 0; i < bitAmount; i++){
         mask++;
         mask = mask << 1;
     }
+    // the if is for the case that Im getting a mask for the offset bits
+    if(right == 0) return mask >> 1;
     mask = mask << right-1;
     return mask;
 }
@@ -61,4 +63,11 @@ int insertAddress(PageTable *table, unsigned int virtualAddress){
     currentLevel->frame++;
     if(currentLevel->frame > 1) return 1;
     else                        return 0;
+}
+
+unsigned int getOffset(unsigned int pageBits, unsigned int virtualAddress){
+    unsigned int mask = getMask(31-pageBits, 0);
+    unsigned int offset;
+    offset = virtualAddress & mask;
+    return offset;
 }
