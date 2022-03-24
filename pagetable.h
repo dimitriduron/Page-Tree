@@ -23,6 +23,7 @@ typedef struct PageTable{
     unordered_map<int, unsigned int> bitmaskArr;
     unordered_map<int, int> shiftArr;
     unordered_map<int, unsigned int> entrycountArr;
+    unordered_map<unsigned int, unsigned int> pages;
     struct Level *rootLevelPtr;
 };
 
@@ -38,6 +39,7 @@ unsigned int getMask(unsigned int, unsigned int);
 unsigned int getOffset(unsigned int, unsigned int);
 unsigned int getFrameAddr(unsigned int, unsigned int, unsigned int);
 void report_bitmasks(int, unordered_map<int, unsigned int>);
+void report_pages(int levels, unordered_map<uint32_t, uint32_t> pages, uint32_t frame);
 void createPage(Level*, unsigned int);
 int insertAddress(PageTable*, unsigned int);
 

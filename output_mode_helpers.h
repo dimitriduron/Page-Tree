@@ -109,6 +109,6 @@ void report_bitmasks(int levels, uint32_t *masks);
  *	   level idx (0 < idx < levels)
  * frame - page is mapped to specified frame
  */
-void report_pagemap(int levels, uint32_t *pages, uint32_t frame);
+void report_pagemap(int levels, uint32_t* pages, uint32_t frame);
 
 #endif

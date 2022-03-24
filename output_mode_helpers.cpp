@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unordered_map>
 #include "output_mode_helpers.h"
 
 /* Handle C++ namespaces, ignore if compiled in C 
@@ -117,7 +118,7 @@ void report_bitmasks(int levels, unordered_map<int, unsigned int> masks) {
  * pages - pages[idx] is the page number associated with level idx (0 < idx < levels)
  * frame - page is mapped to specified frame
  */
-void report_pagemap(int levels, uint32_t *pages, uint32_t frame) {
+void report_pagemap(int levels, uint32_t* pages, uint32_t frame) {
   /* output pages */
   for (int idx=0; idx < levels; idx++)
     printf("%X ", pages[idx]);

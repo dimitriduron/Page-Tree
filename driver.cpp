@@ -156,6 +156,9 @@ int main(int argc, char **argv){
                 frameAddr = getFrameAddr(totBits, vAddr, frameNum);
                 report_virtual2physical(vAddr, frameAddr);
             }
+            else if(o == 4){
+                report_pages(pgtable->levelCount, pgtable->pages, frameNum);
+            }
         }
     }
 

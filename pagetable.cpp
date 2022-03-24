@@ -51,7 +51,7 @@ int insertAddress(PageTable *table, unsigned int virtualAddress){
     for(int i = 0; i < table->levelCount-1; i++){
         mask = table->bitmaskArr[i];
         pageNum = virtualAddressToPageNum(virtualAddress, mask, table->shiftArr[i]);
-
+        table->pages[i] = pageNum;
         //returns true if the next level doesnt exist
         if(currentLevel->nextLevel.find(pageNum) == currentLevel->nextLevel.end()){
             createPage(currentLevel, pageNum);
@@ -64,6 +64,7 @@ int insertAddress(PageTable *table, unsigned int virtualAddress){
     //lowest level we should be accessing, we need to check for frameMap existence now
     mask = table->bitmaskArr[table->levelCount-1];
     pageNum = virtualAddressToPageNum(virtualAddress, mask, table->shiftArr[table->levelCount-1]);
+    table->pages[table->levelCount-1] = pageNum;
     //frame doesnt exist, so we dump frame in here and increment
     if(currentLevel->frameMap.find(pageNum) == currentLevel->frameMap.end()){
         currentLevel->frameMap[pageNum] = table->frameNum;
@@ -92,3 +93,14 @@ unsigned int getFrameAddr(unsigned int pageBits, unsigned int virtualAddress, un
 
     return frameAddr;
 }
+
+void report_pages(int levels, unordered_map<uint32_t, uint32_t> pages, uint32_t frame) {
+  /* output pages */
+  for (int idx=0; idx < levels; idx++)
+    printf("%X ", pages[idx]);
+  /* output frame */
+  printf("-> %X\n", frame);
+
+  fflush(stdout);
+}
+    
