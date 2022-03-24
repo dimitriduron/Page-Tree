@@ -27,9 +27,12 @@ typedef struct PageTable{
 typedef struct Level{
     int depth;
     struct PageTable *pgtable;
-    unordered_map<unsigned int, Level> *nextLevel;
+    unordered_map<unsigned int, Level*> nextLevel;
+    unsigned int frame = 0;
 };
 
 unsigned int virtualAddressToPageNum(unsigned int, unsigned int, unsigned int);
 unsigned int getMask(unsigned int, unsigned int);
 void report_bitmasks(int, unordered_map<int, unsigned int>);
+void createPage(Level*, unsigned int);
+int insertAddress(PageTable*, unsigned int);

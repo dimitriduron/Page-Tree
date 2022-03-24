@@ -105,18 +105,25 @@ int main(int argc, char **argv){
 
     //*******MAIN LOGIC*********//
     //initialize the pagetable struct
-    struct PageTable pgtable;
+    struct PageTable *pgtable;
+    pgtable = new PageTable;
+    struct Level *tempLevel;
+    tempLevel = new Level;
+    tempLevel->depth = 0;
+    tempLevel->pgtable = pgtable;
+    pgtable->rootLevelPtr = tempLevel;
+    
 
-    pgtable.levelCount = lvlNum+1;
+    pgtable->levelCount = lvlNum+1;
     //31 represents the 32nd bit of the hex values/addresses
     int temp_num = 31;
     
     // fills in data for PageTable struct
     for(int i = 0; i <= lvlNum; i++){
         
-        pgtable.entrycountArr[i] = pow(2, level[i]);
-        pgtable.shiftArr[i] = temp_num-level[i]+1;
-        pgtable.bitmaskArr[i] = getMask(temp_num, pgtable.shiftArr[i]);
+        pgtable->entrycountArr[i] = pow(2, level[i]);
+        pgtable->shiftArr[i] = temp_num-level[i]+1;
+        pgtable->bitmaskArr[i] = getMask(temp_num, pgtable->shiftArr[i]);
 
         temp_num -= level[i];
     }
@@ -127,10 +134,17 @@ int main(int argc, char **argv){
 
     FILE *testFile;
     testFile = fopen(argv[filename_index], "r");
+    unsigned int addressCount = 0;
+    unsigned int cacheHits = 0;
+    unsigned int pageHits = 0;
+    unsigned int frameCount = 0;
 
+    //***PROCESS ADDRESSES***//
     while(!feof(testFile)){
         if(NextAddress(testFile, &mtrace)){
             vAddr = mtrace.addr;
+            addressCount++;
+            pageHits += insertAddress(pgtable, vAddr);
             //cout << hex << vAddr << endl;
         }
     }
@@ -139,12 +153,12 @@ int main(int argc, char **argv){
     //***FINAL OUTPUT SECTION***//
     //basic summary output, command line default output
     if(o == 0){
-        //pagesize, cachehits, pagetablehits, addresses, frames_used, bytes
-        report_summary(1, 1, 1, 1, 1, 1);
+        //parameters: pagesize, cachehits, pagetablehits, addresses, frames_used, bytes
+        report_summary(pow(2, 32-totBits), cacheHits, pageHits, addressCount, frameCount, 1);
     }
     //bitmask situation
     else if(o == 1){
-        report_bitmasks(pgtable.levelCount, pgtable.bitmaskArr);
+        report_bitmasks(pgtable->levelCount, pgtable->bitmaskArr);
     }
     
     

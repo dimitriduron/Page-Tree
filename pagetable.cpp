@@ -32,15 +32,33 @@ unsigned int getMask(unsigned int left, unsigned int right){
     return mask;
 }
 
-void insertPage(PageTable *table, unsigned int virtualAddress, unsigned int frame){
-    unsigned int mask;
-    for(int currentLevel = 0; currentLevel < table->levelCount; currentLevel++){
-        mask = table->bitmaskArr[currentLevel];
-        
-
-    }
+void createPage(Level *rootLevel, unsigned int pageNumber){
+    Level *newLevel;
+    newLevel = new Level;
+    rootLevel->nextLevel[pageNumber] = newLevel;
+    newLevel->depth = rootLevel->depth+1;
+    newLevel->pgtable = rootLevel->pgtable;
 }
 
-void insertAddress(PageTable *table, unsigned int virtualAddress, unsigned int frame){
+int insertAddress(PageTable *table, unsigned int virtualAddress){
+    unsigned int mask;
+    unsigned int pageNum;
+    struct Level *currentLevel;
+    currentLevel = table->rootLevelPtr;
 
+    for(int i = 0; i < table->levelCount; i++){
+        mask = table->bitmaskArr[i];
+        pageNum = virtualAddressToPageNum(virtualAddress, mask, table->shiftArr[i]);
+
+        //returns true if the next level doesnt exist
+        if(currentLevel->nextLevel.find(pageNum) == currentLevel->nextLevel.end()){
+            createPage(currentLevel, pageNum);
+            //cout << "page inserted at " << hex << pageNum << dec << endl;
+        }
+        
+        currentLevel = currentLevel->nextLevel[pageNum];
+    }
+    currentLevel->frame++;
+    if(currentLevel->frame > 1) return 1;
+    else                        return 0;
 }
