@@ -48,7 +48,7 @@ int insertAddress(PageTable *table, unsigned int virtualAddress){
     struct Level *currentLevel;
     currentLevel = table->rootLevelPtr;
 
-    for(int i = 0; i < table->levelCount; i++){
+    for(int i = 0; i < table->levelCount-1; i++){
         mask = table->bitmaskArr[i];
         pageNum = virtualAddressToPageNum(virtualAddress, mask, table->shiftArr[i]);
 
@@ -60,9 +60,17 @@ int insertAddress(PageTable *table, unsigned int virtualAddress){
         
         currentLevel = currentLevel->nextLevel[pageNum];
     }
-    currentLevel->frame++;
-    if(currentLevel->frame > 1) return 1;
-    else                        return 0;
+    
+    //lowest level we should be accessing, we need to check for frameMap existence now
+    mask = table->bitmaskArr[table->levelCount-1];
+    pageNum = virtualAddressToPageNum(virtualAddress, mask, table->shiftArr[table->levelCount-1]);
+    //frame doesnt exist, so we dump frame in here and increment
+    if(currentLevel->frameMap.find(pageNum) == currentLevel->frameMap.end()){
+        currentLevel->frameMap[pageNum] = table->frameNum;
+        table->frameNum++;
+        return 0;
+    }
+    return 1;
 }
 
 unsigned int getOffset(unsigned int pageBits, unsigned int virtualAddress){

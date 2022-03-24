@@ -138,7 +138,6 @@ int main(int argc, char **argv){
     unsigned int cacheHits = 0;
     unsigned int pageHits = 0;
     unsigned int frameCount = 0;
-    unsigned int offset;
 
     //***PROCESS ADDRESSES***//
     while(!feof(testFile)){
@@ -159,7 +158,7 @@ int main(int argc, char **argv){
     //basic summary output, command line default output
     if(o == 0){
         //parameters: pagesize, cachehits, pagetablehits, addresses, frames_used, bytes
-        report_summary(pow(2, 32-totBits), cacheHits, pageHits, addressCount, frameCount, 1);
+        report_summary(pow(2, 32-totBits), cacheHits, pageHits, addressCount, pgtable->frameNum, 1);
     }
     //bitmask situation
     else if(o == 1){
