@@ -68,6 +68,7 @@ int insertAddress(PageTable *table, unsigned int virtualAddress){
     if(currentLevel->frameMap.find(pageNum) == currentLevel->frameMap.end()){
         currentLevel->frameMap[pageNum] = table->frameNum;
         table->frameNum++;
+        
     }
     else{
         table->pageHits++;

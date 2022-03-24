@@ -153,7 +153,7 @@ int main(int argc, char **argv){
                 hexnum(getOffset(totBits, vAddr));
             }
             else if(o == 2){
-                frameAddr = getFrameAddr(totBits, vAddr, pgtable->frameNum);
+                frameAddr = getFrameAddr(totBits, vAddr, frameNum);
                 report_virtual2physical(vAddr, frameAddr);
             }
         }
