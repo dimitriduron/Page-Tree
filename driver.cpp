@@ -138,6 +138,7 @@ int main(int argc, char **argv){
     unsigned int cacheHits = 0;
     unsigned int pageHits = 0;
     unsigned int frameCount = 0;
+    unsigned int mask;
 
     //***PROCESS ADDRESSES***//
     while(!feof(testFile)){
@@ -145,7 +146,14 @@ int main(int argc, char **argv){
             vAddr = mtrace.addr;
             addressCount++;
             pageHits += insertAddress(pgtable, vAddr);
-            //cout << hex << vAddr << endl;
+            
+            // when -o is set to offset, we need to print the offset of each 
+            if(o == 5){
+                mask = getMask(totBits, 0);
+                // vAddr is being overwritten and will hold the offset value
+                vAddr = virtualAddressToPageNum(vAddr, mask, 0);
+                hexnum(vAddr);
+            }
         }
     }
 
