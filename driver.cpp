@@ -163,7 +163,8 @@ int main(int argc, char **argv){
             }
             if(!c || !found){
                 frameNum = insertAddress(pgtable, vAddr);
-                adjustTLB(pgtable, vAddr, totBits, frameNum);
+                if(c)
+                    adjustTLB(pgtable, vAddr, totBits, frameNum);
             }
 
             // check for inactive TLB or if TLB hasnt found anything
