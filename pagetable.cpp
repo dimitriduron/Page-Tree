@@ -182,9 +182,10 @@ int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsi
     tlb_node* prevPtr;
     tlbPtr = table->tlbPtr;
     prevPtr = NULL;
-
+    
     // nothing is in the linked list yet so inital node is created here
-    if(table->tlbSize == 0){
+    if(tlbPtr == NULL){
+        tlbPtr = new tlb_node;
         tlbPtr->nextNode = NULL;
         tlbPtr->frame = frameVal;
         tlbPtr->virtualAddress = address;
@@ -202,6 +203,7 @@ int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsi
 
     // if the address hasnt been inputted and the cache isnt at the max size yet
     if(table->tlbSize < tlbMaxSize){
+        tlbPtr = new tlb_node;
         tlbPtr->virtualAddress = address;
         tlbPtr->frame = frameVal;
         tlbPtr->nextNode = table->tlbPtr;
