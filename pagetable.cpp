@@ -173,25 +173,37 @@ Output:
 
 Description:    
 */
-int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsigned int frameVal){
+int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsigned int frameVal, int tlbMaxSize){
 
     tlb_node* tlbPtr;
     tlb_node* prevPtr;
     tlbPtr = table->tlbPtr;
     prevPtr = NULL;
 
+    // nothing is in the linked list yet so inital node is created here
+    if(table->tlbSize == 0){
+        tlbPtr->nextNode = NULL;
+        tlbPtr->frame = frameVal;
+        tlbPtr->virtualAddress = address;
+        table->tlbSize++;
+        return frameVal;
+    }
+
     while(tlbPtr->nextNode != NULL){
-        if(tlbPtr->virtualAddress == 0 || getPageBits(totBits, address) == getPageBits(totBits, tlbPtr->virtualAddress)){
+        if(getPageBits(totBits, address) == getPageBits(totBits, tlbPtr->virtualAddress)){
             break;
         }
         prevPtr = tlbPtr;
         tlbPtr = tlbPtr->nextNode;
     }
 
-    // if the address hasnt been inputted, this is an unfilled node that needs to be filled with data
-    if(tlbPtr->virtualAddress == 0){
+    // if the address hasnt been inputted and the cache isnt at the max size yet
+    if(table->tlbSize < tlbMaxSize){
         tlbPtr->virtualAddress = address;
         tlbPtr->frame = frameVal;
+        tlbPtr->nextNode = table->tlbPtr;
+        table->tlbPtr = tlbPtr;
+        table->tlbSize++;
     }
     // the nodes will readjust and move the tlbPtr to the front of the Linked List
     if(prevPtr != NULL){

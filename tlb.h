@@ -3,8 +3,8 @@
 
 */
 typedef struct tlb_node{
-    unsigned int virtualAddress = 0;
-    unsigned int frame = NULL;
+    unsigned int virtualAddress;
+    unsigned int frame;
     struct tlb_node *nextNode;
 };
 

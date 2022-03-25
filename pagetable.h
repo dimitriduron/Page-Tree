@@ -19,6 +19,7 @@ entryCountArr holds 2^bit input because the page can hold that many address
 */
 typedef struct PageTable{
     int levelCount;
+    int tlbSize = 0;
     unsigned int frameNum = 0;
     unsigned int pageHits = 0;
     unordered_map<int, unsigned int> bitmaskArr;
@@ -46,4 +47,4 @@ void report_pages(int levels, unordered_map<uint32_t, uint32_t> pages, uint32_t 
 void createPage(Level*, unsigned int);
 int insertAddress(PageTable*, unsigned int);
 bool checkTLB(PageTable*, unsigned int, unsigned int);
-int adjustTLB(PageTable*, unsigned int, unsigned int, unsigned int);
+int adjustTLB(PageTable*, unsigned int, unsigned int, unsigned int, int);
