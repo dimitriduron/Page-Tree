@@ -8,6 +8,7 @@ using namespace std;
 #include "output_mode_helpers.h"
 #include "pagetable.h"
 
+
 //helper functions
 extern bool checkForTracer(string);
 extern bool isNumber(string);
@@ -17,7 +18,7 @@ extern bool isNegative(string);
 int main(int argc, char **argv){
     //variables used throughout the program
     int n = -1;
-    int c = -1;
+    int c = 0;
     int o = 0;
     unordered_map<int, int> level;
 
@@ -113,6 +114,9 @@ int main(int argc, char **argv){
     tempLevel->pgtable = pgtable;
     pgtable->rootLevelPtr = tempLevel;
     
+    //initialize the TLB if -c is checked
+    if(c)   pgtable->tlbPtr = createCache(c);
+    else    pgtable->tlbPtr = NULL;
 
     pgtable->levelCount = lvlNum+1;
     //31 represents the 32nd bit of the hex values/addresses
@@ -137,16 +141,27 @@ int main(int argc, char **argv){
     unsigned int addressCount = 0;
     unsigned int cacheHits = 0;
     unsigned int pageHits = 0;
-    unsigned int frameNum;
+    unsigned int frameNum = 0;
     unsigned int offset;
     unsigned int frameAddr;
+    bool found;
 
     //***PROCESS ADDRESSES***//
-    while(!feof(testFile)){
+    while(!feof(testFile) && (n > 0 || n == -1)){
         if(NextAddress(testFile, &mtrace)){
             vAddr = mtrace.addr;
             addressCount++;
+
+            //******TLB SECTION*******//
+            if(c){
+                found = checkTLB(pgtable, vAddr, totBits);
+
+                
+            }
+
+            // check for inactive TLB or if TLB hasnt found anything
             frameNum = insertAddress(pgtable, vAddr);
+            
             
             // when -o is set to offset, we need to print the offset of each 
             if(o == 5){
@@ -159,7 +174,11 @@ int main(int argc, char **argv){
             else if(o == 4){
                 report_pages(pgtable->levelCount, pgtable->pages, frameNum);
             }
+            else if(o == 3){
+
+            }
         }
+        if(n > 0) n--;
     }
 
 

@@ -94,6 +94,10 @@ unsigned int getFrameAddr(unsigned int pageBits, unsigned int virtualAddress, un
     return frameAddr;
 }
 
+unsigned int getPageBits(unsigned int pageBits, unsigned int virtualAddress){
+    return virtualAddress & getMask(31, pageBits);
+}
+
 void report_pages(int levels, unordered_map<uint32_t, uint32_t> pages, uint32_t frame) {
   /* output pages */
   for (int idx=0; idx < levels; idx++)
@@ -103,4 +107,23 @@ void report_pages(int levels, unordered_map<uint32_t, uint32_t> pages, uint32_t 
 
   fflush(stdout);
 }
-    
+
+int checkTLB(PageTable* table, unsigned int address, unsigned int totBits){
+    unsigned int frameVal = insertAddress(table, address);
+    tlb_node* newAddress;
+    tlb_node* prevAddress;
+    newAddress = new tlb_node;
+    prevAddress = NULL;
+    newAddress->virtualAddress = address;
+    newAddress->frame = frameVal;
+    newAddress->nextNode = table->tlbPtr;
+    table->tlbPtr = newAddress;
+    while((newAddress->nextNode != NULL && getPageBits(totBits, address) != getPageBits(totBits, newAddress->virtualAddress)) && newAddress->virtualAddress != 0){
+        prevAddress = newAddress;
+        newAddress = newAddress->nextNode;
+    }
+    if(prevAddress != NULL){
+        prevAddress->nextNode = newAddress->nextNode;
+    }
+    return frameVal;
+}

@@ -3,7 +3,10 @@
 
 */
 typedef struct tlb_node{
-    unsigned int virtualAddress = -1;
-    unsigned int frame = -1;
+    unsigned int virtualAddress = 0;
+    unsigned int frame = NULL;
     struct tlb_node *nextNode;
 };
+
+// struct helper functions
+tlb_node* createCache(int);
