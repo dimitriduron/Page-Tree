@@ -141,6 +141,7 @@ int main(int argc, char **argv){
     unsigned int addressCount = 0;
     unsigned int cacheHits = 0;
     unsigned int pageHits = 0;
+    unsigned int tempFrame = 0;
     unsigned int frameNum = 0;
     unsigned int offset;
     unsigned int frameAddr;
@@ -162,6 +163,7 @@ int main(int argc, char **argv){
                 }
             }
             if(!c || !found){
+                tempFrame = frameNum;
                 frameNum = insertAddress(pgtable, vAddr);
                 if(c)
                     adjustTLB(pgtable, vAddr, totBits, frameNum);
@@ -183,7 +185,8 @@ int main(int argc, char **argv){
                 report_pages(pgtable->levelCount, pgtable->pages, frameNum);
             }
             else if(o == 3){
-
+                frameAddr = getFrameAddr(totBits, vAddr, frameNum);
+                report_v2pUsingTLB_PTwalk(vAddr, frameAddr, found, (tempFrame != frameNum));
             }
             found = false;
         }
