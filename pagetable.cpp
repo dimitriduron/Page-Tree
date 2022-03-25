@@ -155,6 +155,9 @@ Description:    Utilizes the linked list data structure to easily iterate throug
 bool checkTLB(PageTable* table, unsigned int address, unsigned int totBits){
     tlb_node* addressPtr;
     addressPtr = table->tlbPtr;
+    if(addressPtr == NULL){
+        return false;
+    }
     while(addressPtr->nextNode != NULL && addressPtr->virtualAddress != 0){
         if(getPageBits(totBits, address) == getPageBits(totBits, addressPtr->virtualAddress)){
             return true;
