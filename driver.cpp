@@ -155,12 +155,19 @@ int main(int argc, char **argv){
             //******TLB SECTION*******//
             if(c){
                 found = checkTLB(pgtable, vAddr, totBits);
-
-                
+                if(found){
+                    cacheHits++;
+                    // we use 0 for frame parameter because we wont encounter the case where the node doesnt exist
+                    frameNum = adjustTLB(pgtable, vAddr, totBits, 0);
+                }
+            }
+            if(!c || !found){
+                frameNum = insertAddress(pgtable, vAddr);
+                adjustTLB(pgtable, vAddr, totBits, frameNum);
             }
 
             // check for inactive TLB or if TLB hasnt found anything
-            frameNum = insertAddress(pgtable, vAddr);
+            // frameNum = insertAddress(pgtable, vAddr);
             
             
             // when -o is set to offset, we need to print the offset of each 
@@ -177,6 +184,7 @@ int main(int argc, char **argv){
             else if(o == 3){
 
             }
+            found = false;
         }
         if(n > 0) n--;
     }

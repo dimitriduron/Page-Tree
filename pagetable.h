@@ -45,4 +45,5 @@ void report_bitmasks(int, unordered_map<int, unsigned int>);
 void report_pages(int levels, unordered_map<uint32_t, uint32_t> pages, uint32_t frame);
 void createPage(Level*, unsigned int);
 int insertAddress(PageTable*, unsigned int);
-int checkTLB(PageTable*, unsigned int, unsigned int);
+bool checkTLB(PageTable*, unsigned int, unsigned int);
+int adjustTLB(PageTable*, unsigned int, unsigned int, unsigned int);
