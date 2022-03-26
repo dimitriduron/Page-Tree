@@ -3,6 +3,7 @@
 
 */
 typedef struct tlb_node{
+    bool active = false;
     unsigned int virtualAddress;
     unsigned int frame;
     struct tlb_node *nextNode;

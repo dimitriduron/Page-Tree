@@ -113,10 +113,10 @@ int main(int argc, char **argv){
     tempLevel->depth = 0;
     tempLevel->pgtable = pgtable;
     pgtable->rootLevelPtr = tempLevel;
-    pgtable->tlbPtr = NULL;
+    
     //initialize the TLB if -c is checked
-    //if(c)   pgtable->tlbPtr = createCache(c);
-    //else    pgtable->tlbPtr = NULL;
+    if(c)   pgtable->tlbPtr = createCache(c);
+    else    pgtable->tlbPtr = NULL;
 
     pgtable->levelCount = lvlNum+1;
     //31 represents the 32nd bit of the hex values/addresses
@@ -145,7 +145,6 @@ int main(int argc, char **argv){
     unsigned int frameNum = 0;
     unsigned int offset;
     unsigned int frameAddr;
-    int tlbSize = 0;
     bool found;
 
     //***PROCESS ADDRESSES***//
@@ -160,14 +159,14 @@ int main(int argc, char **argv){
                 if(found){
                     cacheHits++;
                     // we use 0 for frame parameter because we wont encounter the case where the node doesnt exist
-                    frameNum = adjustTLB(pgtable, vAddr, totBits, 0, c);
+                    frameNum = adjustTLB(pgtable, vAddr, totBits, 0);
                 }
             }
             if(!c || !found){
                 tempFrame = frameNum;
                 frameNum = insertAddress(pgtable, vAddr);
                 if(c)
-                    adjustTLB(pgtable, vAddr, totBits, frameNum, c);
+                    adjustTLB(pgtable, vAddr, totBits, frameNum);
             }
 
             // check for inactive TLB or if TLB hasnt found anything

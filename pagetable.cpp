@@ -155,9 +155,6 @@ Description:    Utilizes the linked list data structure to easily iterate throug
 bool checkTLB(PageTable* table, unsigned int address, unsigned int totBits){
     tlb_node* addressPtr;
     addressPtr = table->tlbPtr;
-    if(addressPtr == NULL){
-        return false;
-    }
     while(addressPtr->nextNode != NULL && addressPtr->virtualAddress != 0){
         if(getPageBits(totBits, address) == getPageBits(totBits, addressPtr->virtualAddress)){
             return true;
@@ -176,24 +173,14 @@ Output:
 
 Description:    
 */
-int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsigned int frameVal, int tlbMaxSize){
+int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsigned int frameVal){
 
     tlb_node* tlbPtr;
     tlb_node* prevPtr;
     tlbPtr = table->tlbPtr;
     prevPtr = NULL;
-    
-    // nothing is in the linked list yet so inital node is created here
-    if(tlbPtr == NULL){
-        tlbPtr = new tlb_node;
-        tlbPtr->nextNode = NULL;
-        tlbPtr->frame = frameVal;
-        tlbPtr->virtualAddress = address;
-        table->tlbSize++;
-        return frameVal;
-    }
 
-    while(tlbPtr->nextNode != NULL){
+    while(tlbPtr->nextNode != NULL || tlbPtr->active){
         if(getPageBits(totBits, address) == getPageBits(totBits, tlbPtr->virtualAddress)){
             break;
         }
@@ -201,14 +188,11 @@ int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsi
         tlbPtr = tlbPtr->nextNode;
     }
 
-    // if the address hasnt been inputted and the cache isnt at the max size yet
-    if(table->tlbSize < tlbMaxSize){
-        tlbPtr = new tlb_node;
+    // if the address hasnt been inputted, this is an unfilled node that needs to be filled with data
+    if(!tlbPtr->active){
+        tlbPtr->active = true;
         tlbPtr->virtualAddress = address;
         tlbPtr->frame = frameVal;
-        tlbPtr->nextNode = table->tlbPtr;
-        table->tlbPtr = tlbPtr;
-        table->tlbSize++;
     }
     // the nodes will readjust and move the tlbPtr to the front of the Linked List
     if(prevPtr != NULL){
