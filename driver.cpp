@@ -130,6 +130,7 @@ int main(int argc, char **argv){
 
         temp_num -= level[i];
     }
+    pgtable->totSize = pgtable->entrycountArr[0];
     
     // read in trace file
     p2AddrTr mtrace;
