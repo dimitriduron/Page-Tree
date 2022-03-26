@@ -41,12 +41,13 @@ Output: Void return, but create a new page at the specific index
 Description:    This a nice helper function to simplify the confusing code and creates a new page
         in a simple way.
 */
-void createPage(Level *rootLevel, unsigned int pageNumber){
+void createPage(Level *rootLevel, unsigned int pageNumber, PageTable* table){
     Level *newLevel;
     newLevel = new Level;
     rootLevel->nextLevel[pageNumber] = newLevel;
     newLevel->depth = rootLevel->depth+1;
     newLevel->pgtable = rootLevel->pgtable;
+    table->totPageCount++;
 }
 
 /*
@@ -68,7 +69,7 @@ int insertAddress(PageTable *table, unsigned int virtualAddress){
         table->pages[i] = pageNum;
         //returns true if the next level doesnt exist
         if(currentLevel->nextLevel.find(pageNum) == currentLevel->nextLevel.end()){
-            createPage(currentLevel, pageNum);
+            createPage(currentLevel, pageNum, table);
             //cout << "page inserted at " << hex << pageNum << dec << endl;
         }
         

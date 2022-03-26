@@ -21,7 +21,6 @@ int main(int argc, char **argv){
     int c = 0;
     int o = 0;
     unordered_map<int, int> level;
-
     int marker = -1;
     int totBits = 0;
     int num;
@@ -143,7 +142,6 @@ int main(int argc, char **argv){
     unsigned int pageHits = 0;
     unsigned int tempFrame = 0;
     unsigned int frameNum = 0;
-    unsigned int offset;
     unsigned int frameAddr;
     bool found;
 
@@ -170,25 +168,25 @@ int main(int argc, char **argv){
                     adjustTLB(pgtable, vAddr, totBits, frameNum);
                 }
             }
-
-            // check for inactive TLB or if TLB hasnt found anything
-            // frameNum = insertAddress(pgtable, vAddr);
             
-            
+            //********SOME OUTPUTS THAT NEED TO HAPPEN PER LINE********//
             // when -o is set to offset, we need to print the offset of each 
             if(o == 5){
                 hexnum(getOffset(totBits, vAddr));
             }
+            //displays the output for the frame addresses
             else if(o == 2){
                 frameAddr = getFrameAddr(totBits, vAddr, frameNum);
                 report_virtual2physical(vAddr, frameAddr);
             }
+            //shoes each bits for the pages and the allocated frame
             else if(o == 4){
                 report_pages(pgtable->levelCount, pgtable->pages, frameNum);
             }
+            //outputs for when a TLB is active
             else if(o == 3){
                 frameAddr = getFrameAddr(totBits, vAddr, frameNum);
-                report_v2pUsingTLB_PTwalk(vAddr, frameAddr, found, (tempFrame == frameNum));
+                report_v2pUsingTLB_PTwalk(vAddr, frameAddr, found, (tempFrame != frameNum));
             }
             found = false;
         }
@@ -200,7 +198,7 @@ int main(int argc, char **argv){
     //basic summary output, command line default output
     if(o == 0){
         //parameters: pagesize, cachehits, pagetablehits, addresses, frames_used, bytes
-        report_summary(pow(2, 32-totBits), cacheHits, pgtable->pageHits, addressCount, pgtable->frameNum, 1);
+        report_summary(pow(2, 32-totBits), cacheHits, pgtable->pageHits, addressCount, pgtable->frameNum, pgtable->totPageCount*sizeof(Level));
     }
     //bitmask situation
     else if(o == 1){
