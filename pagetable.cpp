@@ -170,11 +170,12 @@ bool checkTLB(PageTable* table, unsigned int address, unsigned int totBits){
 
 /*
 Input:  table pointer, an address to add, the length of bits for pages, a frame to assign if applicable
-Output: 
+Output: returns the frame value
 
-Description:    
+Description:    Uses the linked list data structre that the TLB is to change up the nodes and
+        keep the same number of nodes within the TLB/cache
 */
-int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsigned int frameVal){
+unsigned int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsigned int frameVal){
 
     tlb_node* tlbPtr;
     tlb_node* prevPtr;

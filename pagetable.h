@@ -31,6 +31,10 @@ typedef struct PageTable{
     struct tlb_node* tlbPtr;
 };
 
+/*
+Level is meant to represent a page within the page table, the map to nextLevel points to child Levels
+and frameMap is for the bottom/leaf Level to store the frame value into within the tree
+*/
 typedef struct Level{
     int depth;
     struct PageTable *pgtable;
@@ -38,6 +42,7 @@ typedef struct Level{
     unordered_map<unsigned int, unsigned int> frameMap;
 };
 
+// a lot of helper functions
 unsigned int virtualAddressToPageNum(unsigned int, unsigned int, unsigned int);
 unsigned int getMask(unsigned int, unsigned int);
 unsigned int getOffset(unsigned int, unsigned int);
@@ -48,4 +53,4 @@ void report_pages(int levels, unordered_map<uint32_t, uint32_t> pages, uint32_t 
 void createPage(Level*, unsigned int, PageTable*);
 int insertAddress(PageTable*, unsigned int);
 bool checkTLB(PageTable*, unsigned int, unsigned int);
-int adjustTLB(PageTable*, unsigned int, unsigned int, unsigned int);
+unsigned int adjustTLB(PageTable*, unsigned int, unsigned int, unsigned int);
