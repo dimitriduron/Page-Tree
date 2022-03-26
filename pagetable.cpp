@@ -155,13 +155,14 @@ Description:    Utilizes the linked list data structure to easily iterate throug
 bool checkTLB(PageTable* table, unsigned int address, unsigned int totBits){
     tlb_node* addressPtr;
     addressPtr = table->tlbPtr;
-    while(addressPtr->nextNode != NULL && addressPtr->virtualAddress != 0){
+    if(!addressPtr->active) return false;
+    while(addressPtr->nextNode != NULL && addressPtr->active){
         if(getPageBits(totBits, address) == getPageBits(totBits, addressPtr->virtualAddress)){
             return true;
         }
         addressPtr = addressPtr->nextNode;
     }
-    if(getPageBits(totBits, address) == getPageBits(totBits, addressPtr->virtualAddress)){
+    if(getPageBits(totBits, address) == getPageBits(totBits, addressPtr->virtualAddress) && addressPtr->active){
         return true;
     }
     return false;
@@ -181,12 +182,10 @@ int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsi
     prevPtr = NULL;
 
     
-    while(tlbPtr->nextNode != 0 || tlbPtr->active){
+    while(tlbPtr->nextNode != NULL && tlbPtr->active){
         if(getPageBits(totBits, address) == getPageBits(totBits, tlbPtr->virtualAddress)){
             break;
         }
-        // for some reason the argument in the while loop doesnt work so this is here
-        if(tlbPtr->nextNode ==  0)  break;
         prevPtr = tlbPtr;
         tlbPtr = tlbPtr->nextNode;
     }
