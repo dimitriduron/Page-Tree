@@ -180,14 +180,16 @@ int adjustTLB(PageTable* table, unsigned int address, unsigned int totBits, unsi
     tlbPtr = table->tlbPtr;
     prevPtr = NULL;
 
-    while(tlbPtr->nextNode != NULL || tlbPtr->active){
+    
+    while(tlbPtr->nextNode != 0 || tlbPtr->active){
         if(getPageBits(totBits, address) == getPageBits(totBits, tlbPtr->virtualAddress)){
             break;
         }
+        // for some reason the argument in the while loop doesnt work so this is here
+        if(tlbPtr->nextNode ==  0)  break;
         prevPtr = tlbPtr;
         tlbPtr = tlbPtr->nextNode;
     }
-
     // if the address hasnt been inputted, this is an unfilled node that needs to be filled with data
     if(!tlbPtr->active){
         tlbPtr->active = true;

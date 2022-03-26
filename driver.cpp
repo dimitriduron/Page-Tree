@@ -153,6 +153,7 @@ int main(int argc, char **argv){
             vAddr = mtrace.addr;
             addressCount++;
 
+            //cout << hex << vAddr << endl;
             //******TLB SECTION*******//
             if(c){
                 found = checkTLB(pgtable, vAddr, totBits);
@@ -165,8 +166,9 @@ int main(int argc, char **argv){
             if(!c || !found){
                 tempFrame = frameNum;
                 frameNum = insertAddress(pgtable, vAddr);
-                if(c)
+                if(c){
                     adjustTLB(pgtable, vAddr, totBits, frameNum);
+                }
             }
 
             // check for inactive TLB or if TLB hasnt found anything
