@@ -188,7 +188,7 @@ int main(int argc, char **argv){
             }
             else if(o == 3){
                 frameAddr = getFrameAddr(totBits, vAddr, frameNum);
-                report_v2pUsingTLB_PTwalk(vAddr, frameAddr, found, (tempFrame != frameNum));
+                report_v2pUsingTLB_PTwalk(vAddr, frameAddr, found, (tempFrame == frameNum));
             }
             found = false;
         }
