@@ -198,7 +198,7 @@ int main(int argc, char **argv){
     //basic summary output, command line default output
     if(o == 0){
         //parameters: pagesize, cachehits, pagetablehits, addresses, frames_used, bytes
-        report_summary(pow(2, 32-totBits), cacheHits, pgtable->pageHits, addressCount, pgtable->frameNum, pgtable->totPageCount*sizeof(Level));
+        report_summary(pow(2, 32-totBits), cacheHits, pgtable->pageHits, addressCount, pgtable->frameNum, pgtable->totSize);
     }
     //bitmask situation
     else if(o == 1){

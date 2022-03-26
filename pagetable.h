@@ -19,7 +19,7 @@ entryCountArr holds 2^bit input because the page can hold that many address
 */
 typedef struct PageTable{
     int levelCount;
-    unsigned int totPageCount = 0;
+    unsigned int totSize = 0;
     int TLBsize = 0;
     unsigned int frameNum = 0;
     unsigned int pageHits = 0;
